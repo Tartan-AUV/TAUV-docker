@@ -8,29 +8,6 @@ FROM ${BASE_IMAGE}
 
 
 
-#This environment variable is needed to use the streaming features on Jetson inside a container
-ENV LOGNAME root
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update -y && apt-get install --no-install-recommends lsb-release wget less udev sudo apt-transport-https -y && \
-    echo "# R32 (release), REVISION: 6.1" > /etc/nv_tegra_release ; \
-    wget -q --no-check-certificate -O ZED_SDK_Linux_JP.run https://download.stereolabs.com/zedsdk/3.6/jp46/jetsons && \
-    chmod +x ZED_SDK_Linux_JP.run ; ./ZED_SDK_Linux_JP.run silent skip_tools && \
-    rm -rf /usr/local/zed/resources/* \
-    rm -rf ZED_SDK_Linux_JP.run && \
-    rm -rf /var/lib/apt/lists/*
-
-# ZED Python API
-RUN apt-get update -y && apt-get install --no-install-recommends python3 python3-pip python3-dev python3-setuptools build-essential python3-numpy -y && \ 
-    wget download.stereolabs.com/zedsdk/pyzed -O /usr/local/zed/get_python_api.py && \
-    python3 /usr/local/zed/get_python_api.py && \
-    python3 -m pip install cython wheel && \
-    python3 -m pip install pyopengl *.whl && \
-    apt-get remove --purge build-essential -y && apt-get autoremove -y && \
-    rm *.whl ; rm -rf /var/lib/apt/lists/*
-
-#This symbolic link is needed to use the streaming features on Jetson inside a container
-RUN ln -sf /usr/lib/aarch64-linux-gnu/tegra/libv4l2.so.0 /usr/lib/aarch64-linux-gnu/libv4l2.so
-
 
 # install OpenCV (with CUDA)
 
@@ -51,36 +28,45 @@ RUN mkdir opencv && \
     rm -rf opencv
 
 
-# install Packages for usb_cam
 
-RUN apt-get update -y && apt-get install --no-install-recommends ffmpeg libavcodec-dev libavformat-dev libavutil-dev libswscale-dev \ 
-    v4l-utils libeigen3-dev liborocos-kdl-dev liborocos-kdl1.3 libbullet-dev libyaml-cpp-dev build-essential -y
+#This environment variable is needed to use the streaming features on Jetson inside a container
+ENV LOGNAME root
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update -y && apt-get install --no-install-recommends lsb-release wget less udev sudo apt-transport-https -y && \
+    echo "# R32 (release), REVISION: 6.1" > /etc/nv_tegra_release ; \
+    wget -q --no-check-certificate -O ZED_SDK_Linux_JP.run https://download.stereolabs.com/zedsdk/3.7/jp46/jetsons && \
+    chmod +x ZED_SDK_Linux_JP.run ; ./ZED_SDK_Linux_JP.run silent skip_tools && \
+    rm -rf /usr/local/zed/resources/* \
+    rm -rf ZED_SDK_Linux_JP.run && \
+    rm -rf /var/lib/apt/lists/*
 
+# ZED Python API
+RUN apt-get update -y && apt-get install --no-install-recommends python3 python3-pip python3-dev python3-setuptools build-essential python3-numpy -y && \
+    wget download.stereolabs.com/zedsdk/pyzed -O /usr/local/zed/get_python_api.py && \
+    python3 /usr/local/zed/get_python_api.py && \
+    python3 -m pip install cython wheel && \
+    python3 -m pip install pyopengl *.whl && \
+    apt-get remove --purge build-essential -y && apt-get autoremove -y && \
+    rm *.whl ; rm -rf /var/lib/apt/lists/*
+
+#This symbolic link is needed to use the streaming features on Jetson inside a container
+RUN ln -sf /usr/lib/aarch64-linux-gnu/tegra/libv4l2.so.0 /usr/lib/aarch64-linux-gnu/libv4l2.so
 
 # install ROS Dependencies for ZED and TAUV Packages
-
+RUN apt-get update -y && apt-get install --no-install-recommends build-essential -y
 RUN mkdir ros_core_pkg_ws && \
     cd ros_core_pkg_ws && \
     rosinstall_generator usb_cam nav_msgs tf2_geometry_msgs message_runtime catkin roscpp stereo_msgs rosconsole robot_state_publisher urdf sensor_msgs image_transport roslint diagnostic_updater dynamic_reconfigure tf2_ros message_generation nodelet xacro robot_localization vision_msgs jsk_recognition_msgs actionlib class_loader common_msgs gencpp geneus genlisp genmsg gennodejs genpy message_generation message_runtime pluginlib python_qt_binding qt_gui_core ros_comm rqt rqt_console rqt_logger_level rqt_reconfigure image_transport --rosdistro noetic --deps --tar > ZED.rosinstall && \
     mkdir src && \
     vcs import --input ZED.rosinstall ./src && \
     apt-get update && \
-    rosdep install --from-paths ./src --ignore-packages-from-source --rosdistro noetic --skip-keys python3-pykdl --skip-keys libopencv-dev  -y && \
+    rosdep install --from-paths ./src --ignore-packages-from-source --rosdistro noetic --skip-keys python3-pykdl --skip-keys libopencv-dev -y && \
     pip3 install catkin_tools && \
     catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release -DBOOST_THREAD_INTERNAL_CLOCK_IS_MONO=True && \
     catkin config --install --install-space /opt/tauv/packages && \
     catkin build && \
     rm -rf /var/lib/apt/lists/* && \ 
     cd ../ 
-
-
-#RUN mkdir multimaster_iso_ws && \ 
-#    cd multimaster_iso_ws && \ 
-#    rosinstall_generator multimaster_fkie --rosdistro melodic --deps --tar > multi.rosinstall && \ 
-#    mkdir src && \ 
-#    vcs import --input multi.rosinstall ./src && \ 
-#    apt-get update && \ 
-#    rosdep install --from-paths ./src --ignore-packages-from-source --rosdistro noetic --skip-keys python3-pykdl -y
 
 
 WORKDIR /workspace
@@ -90,21 +76,11 @@ RUN pip3 install --upgrade pip && \
     pip3 install scipy pyserial bitstring smbus2 grpcio-tools
 
 
-RUN mkdir -p multimaster_ws/src && \ 
-    cd multimaster_ws/src && \ 
-    git clone https://github.com/fkie/multimaster_fkie.git && \ 
-    cd multimaster_fkie && \ 
-    git checkout noetic-devel && \ 
-    cd ../../ && \ 
-    catkin config --install --install-space /opt/tauv/packages && \
-    catkin build && \
-    source /opt/tauv/packages/setup.bash
-
-
+RUN sudo apt-get update && apt-get install libusb-1.0-0-dev -y 
 
 RUN source /opt/tauv/packages/setup.bash && \
     mkdir -p zed_ros_ws/src && \
-    cd zed_ros_ws/src && \
+    cd zed_ros_ws/src && \ 
     git clone --recursive https://github.com/stereolabs/zed-ros-wrapper.git && \
     cd ../ && \ 
     catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release -DBOOST_THREAD_INTERNAL_CLOCK_IS_MONO=True && \
@@ -121,7 +97,7 @@ RUN source /opt/tauv/packages/setup.bash && \
     cd ../../ && \
     catkin build && \
     source ./devel/setup.bash
-
+    
 RUN source /opt/tauv/packages/setup.bash && \
     mkdir -p darknet_ws/src && \
     cd darknet_ws/src && \
@@ -134,18 +110,10 @@ RUN source /opt/tauv/packages/setup.bash && \
     catkin config --install --install-space /opt/tauv/packages && \
     catkin build && \ 
     source /opt/tauv/packages/setup.bash
+#  setup entrypoint
 
-
-
-
-
-
-# setup entrypoint
-#
 COPY ./ros_entrypoint.sh /ros_entrypoint.sh
 RUN echo 'source /opt/ros/${ROS_DISTRO}/setup.bash' >> /root/.bashrc
-RUN echo 'source /opt/tauv/packages/setup.bash' >> /root/.bashrc
-RUN echo 'source /workspace/tauv_ws/devel/setup.bash' >> /root/.bashrc
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["tail", "-f", "/dev/null"]
 WORKDIR /
