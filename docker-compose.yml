@@ -2,7 +2,7 @@ version: "3.9"
 services:
   tauvservice:
     build: .
-    image: tauvcontainer:stable
+    image: tauvcontainer:fast-darknet
     volumes:
       - /dev:/dev
       - /tm.X11-unix/:/tmp/.X11-unix
