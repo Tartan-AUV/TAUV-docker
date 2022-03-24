@@ -35,6 +35,9 @@ RUN source /opt/tauv/packages/setup.bash && \
 
 COPY ./ros_entrypoint.sh /ros_entrypoint.sh
 RUN echo 'source /opt/ros/${ROS_DISTRO}/setup.bash' >> /root/.bashrc
+RUN echo 'source /opt/tauv/packages/setup.bash' >> /root/.bashrc
+RUN echo 'source /workspace/tauv_ws/devel/setup.bash' >> /root/.bashrc
+
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["tail", "-f", "/dev/null"]
 WORKDIR /
