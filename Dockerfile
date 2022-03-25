@@ -31,6 +31,20 @@ RUN source /opt/tauv/packages/setup.bash && \
     cd ../../ && \
     catkin build && \
     source ./devel/setup.bash
+
+RUN source /opt/tauv/packages/setup.bash && \
+    mkdir -p darknet_ws/src && \
+    cd darknet_ws/src && \
+    git clone --recursive https://github.com/leggedrobotics/darknet_ros && \
+    cd ../ && \ 
+    rosinstall_generator cv_bridge --rosdistro noetic --tar > darknet.rosinstall && \ 
+    vcs import --input darknet.rosinstall ./src && \ 
+    sed -i 's/python37/python3/' src/vision_opencv/cv_bridge/CMakeLists.txt && \ 
+    catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release -DBOOST_THREAD_INTERNAL_CLOCK_IS_MONO=True && \
+    catkin config --install --install-space /opt/tauv/packages && \
+    catkin build && \ 
+    source /opt/tauv/packages/setup.bash
+
 #  setup entrypoint
 
 COPY ./ros_entrypoint.sh /ros_entrypoint.sh
