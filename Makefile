@@ -12,12 +12,16 @@ up: build
 # Kills the docker container
 .PHONY: kill
 kill:
-	docker-compose kill
+	docker-compose kill && docker-compose rm 
 
 # Attaches a shell to the docker container
 .PHONY: attach
 attach:
 	docker-compose exec tauvservice /bin/bash
+
+.PHONY: rm
+rm:
+	docker-compose rm
 
 # Same as up, but also recreates the docker-compose config. (reloads the yaml, basically)
 .PHONY: recreate-up
