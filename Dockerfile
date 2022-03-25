@@ -72,7 +72,7 @@ RUN pip3 install --upgrade pip && \
     pip3 install scipy pyserial bitstring smbus2 grpcio-tools
 
 
-RUN sudo apt-get update && apt-get install libusb-1.0-0-dev -y 
+RUN sudo apt-get update && apt-get install libusb-1.0-0-dev vim -y 
 
 
 #  setup entrypoint
