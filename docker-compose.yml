@@ -8,6 +8,7 @@ services:
       - /tm.X11-unix/:/tmp/.X11-unix
       - /dev/video0:/dev/video0
       - /tmp/.docker.xauth:/tmp/.docker.xauth
+      - /home/tartanauv/nvme/shared:/shared 
     environment:
       XAUTHORITY: /tmp/.docker.xauth
     network_mode: "host"
