@@ -6,7 +6,7 @@ build:
 
 # Builds and starts the docker container in the background
 .PHONY: up
-up: build
+up: kill 
 	docker-compose up -d
 
 # Kills the docker container

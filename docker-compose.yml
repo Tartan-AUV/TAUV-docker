@@ -2,10 +2,10 @@ version: "3.9"
 services:
   tauvservice:
     build: .
-    image: tauvcontainer:fast-darknet
+    image: tauvcontainer:pytorch
     volumes:
       - /dev:/dev
-      - /tm.X11-unix/:/tmp/.X11-unix
+      # - /tm.X11-unix/:/tmp/.X11-unix
       - /dev/video0:/dev/video0
       - /tmp/.docker.xauth:/tmp/.docker.xauth
     environment:
