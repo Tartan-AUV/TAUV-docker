@@ -22,15 +22,7 @@ RUN source /opt/tauv/packages/setup.bash && \
     catkin build && \ 
     source ./devel/setup.bash
 
-RUN source /opt/tauv/packages/setup.bash && \
-    mkdir -p tauv_ws/src && \
-    cd tauv_ws/src && \
-    git clone --recurse-submodules https://github.com/Tartan-AUV/TAUV-ROS-Packages && \
-    cd TAUV-ROS-Packages && \
-    git checkout kingfisher_deploy && \
-    cd ../../ && \
-    catkin build && \
-    source ./devel/setup.bash
+
 
 RUN source /opt/tauv/packages/setup.bash && \
     mkdir -p darknet_ws/src && \
