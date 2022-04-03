@@ -2,11 +2,11 @@ version: "3.9"
 services:
   tauvservice:
     build: .
-    image: tartanauv/tauvcontainer:base
+    image: tartanauv/tauvcontainer:host
     volumes:
       - /dev:/dev
-      - /dev/video0:/dev/video0
       - /tmp/.docker.xauth:/tmp/.docker.xauth
+
     environment:
       XAUTHORITY: /tmp/.docker.xauth
     network_mode: "host"
