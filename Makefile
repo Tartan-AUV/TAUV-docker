@@ -1,13 +1,15 @@
-
 # builds the docker container
 .PHONY: build
+
+
 build:
-	docker-compose build
+	displayip="$(shell /bin/zsh -c "ifconfig en0 | grep inet | grep 'inet ' | cut -d' ' -f2 ")" docker-compose build
+# mip=$(ifconfig en0 | grep inet | awk '$1=="inet" {print $2}')        
 
 # Builds and starts the docker container in the background
 .PHONY: up
 up: build
-	docker-compose up -d
+	displayip="$(shell /bin/zsh -c "ifconfig en0 | grep inet | grep 'inet ' | cut -d' ' -f2 ")" docker-compose up -d && open -a XQuartz && xhost + 
 
 # Kills the docker container
 .PHONY: kill

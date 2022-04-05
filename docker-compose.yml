@@ -6,9 +6,12 @@ services:
     volumes:
       - /dev:/dev
       - /tmp/.docker.xauth:/tmp/.docker.xauth
-
+      - /Users/rishabh/Documents/code/tauv_ws/:/shared/tauv_ws
+      - /Users/rishabh/Documents/code/bags/:/shared/bags
     environment:
       XAUTHORITY: /tmp/.docker.xauth
+      DISPLAY: $displayip:0
+      QT_X11_NO_MITSHM: 1
     network_mode: "host"
     privileged: true  
 
