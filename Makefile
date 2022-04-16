@@ -31,7 +31,7 @@ recreate-up: build
 .PHONY: install
 install:
 	docker run hello-world
-	sudo apt-get install \
+	sudo apt-get install -y \
 			ca-certificates \
 			curl \
 			gnupg \
@@ -41,8 +41,14 @@ install:
 		"deb [arch=$(shell dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
 		focal stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 	sudo apt-get update
-	sudo apt-get install docker-ce docker-ce-cli containerd.io
+	sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 	sudo groupadd -f docker
 	sudo usermod -aG docker $(USER)
 	newgrp docker
-	docker run hello-world
+
+.PHONY: install-qemu
+install-qemu:
+	sudo apt update && sudo apt install \
+qemu-kvm qemu virt-manager virt-viewer libvirt-clients libvirt-daemon-system bridge-utils virtinst libvirt-daemon qemu binfmt-support qemu-user-static
+	docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+	echo "Successfully installed docker and qemu"
