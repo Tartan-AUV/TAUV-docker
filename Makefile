@@ -33,6 +33,7 @@ install:
 	docker run hello-world
 	sudo apt-get install -y \
 			ca-certificates \
+			python3-pip \
 			curl \
 			gnupg \
 			lsb-release
@@ -44,6 +45,7 @@ install:
 	sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 	sudo groupadd -f docker
 	sudo usermod -aG docker $(USER)
+	pip3 install docker-compose
 	newgrp docker
 
 .PHONY: install-qemu
