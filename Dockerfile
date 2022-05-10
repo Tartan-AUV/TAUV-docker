@@ -2,7 +2,7 @@
 # this dockerfile roughly follows the 'Installing from source' from:
 #   http://wiki.ros.org/noetic/Installation/Source
 #
-ARG BASE_IMAGE=dustynv/ros:noetic-ros-base-l4t-r32.6.1
+ARG BASE_IMAGE=dustynv/ros:noetic-ros-base-l4t-r34.1.0
 FROM ${BASE_IMAGE}
 
 
@@ -11,21 +11,21 @@ FROM ${BASE_IMAGE}
 
 # install OpenCV (with CUDA)
 
-ARG OPENCV_URL=https://nvidia.box.com/shared/static/5v89u6g5rb62fpz4lh0rz531ajo2t5ef.gz
-ARG OPENCV_DEB=OpenCV-4.5.0-aarch64.tar.gz
+# ARG OPENCV_URL=https://nvidia.box.com/shared/static/5v89u6g5rb62fpz4lh0rz531ajo2t5ef.gz
+# ARG OPENCV_DEB=OpenCV-4.5.0-aarch64.tar.gz
 
-RUN mkdir opencv && \
-    cd opencv && \
-    wget --quiet --show-progress --progress=bar:force:noscroll --no-check-certificate ${OPENCV_URL} -O ${OPENCV_DEB} && \
-    tar -xzvf ${OPENCV_DEB} && \
-    dpkg -i --force-depends *.deb && \
-    apt-get update && \
-    apt-get install -y -f --no-install-recommends && \
-    dpkg -i *.deb && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean && \
-    cd ../ && \
-    rm -rf opencv
+# RUN mkdir opencv && \
+#     cd opencv && \
+#     wget --quiet --show-progress --progress=bar:force:noscroll --no-check-certificate ${OPENCV_URL} -O ${OPENCV_DEB} && \
+#     tar -xzvf ${OPENCV_DEB} && \
+#     dpkg -i --force-depends *.deb && \
+#     apt-get update && \
+#     apt-get install -y -f --no-install-recommends && \
+#     dpkg -i *.deb && \
+#     rm -rf /var/lib/apt/lists/* && \
+#     apt-get clean && \
+#     cd ../ && \
+#     rm -rf opencv
 
 
 
@@ -34,7 +34,7 @@ ENV LOGNAME root
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update -y && apt-get install --no-install-recommends lsb-release wget less udev sudo apt-transport-https -y && \
     echo "# R32 (release), REVISION: 6.1" > /etc/nv_tegra_release ; \
-    wget -q --no-check-certificate -O ZED_SDK_Linux_JP.run https://download.stereolabs.com/zedsdk/3.7/jp46/jetsons && \
+    wget -q --no-check-certificate -O ZED_SDK_Linux_JP.run https://download.stereolabs.com/zedsdk/3.7/l4t34.1/jetsons && \
     chmod +x ZED_SDK_Linux_JP.run ; ./ZED_SDK_Linux_JP.run silent skip_tools && \
     rm -rf /usr/local/zed/resources/* \
     rm -rf ZED_SDK_Linux_JP.run && \

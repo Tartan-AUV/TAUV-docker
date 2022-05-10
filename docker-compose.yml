@@ -2,7 +2,7 @@ version: "3.9"
 services:
   tauvservice:
     build: .
-    image: tartanauv/tauvcontainer:base
+    image: tartanauv/tauvcontainer:orin-base
     volumes:
       - /dev:/dev
       - /dev/video0:/dev/video0
