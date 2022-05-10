@@ -46,7 +46,6 @@ RUN apt-get update -y && apt-get install --no-install-recommends python3 python3
     python3 /usr/local/zed/get_python_api.py && \
     python3 -m pip install cython wheel && \
     python3 -m pip install pyopengl *.whl && \
-    apt-get remove --purge build-essential -y && apt-get autoremove -y && \
     rm *.whl ; rm -rf /var/lib/apt/lists/*
 
 #This symbolic link is needed to use the streaming features on Jetson inside a container
@@ -74,6 +73,34 @@ RUN pip3 install --upgrade pip && \
 
 RUN sudo apt-get update && apt-get install libusb-1.0-0-dev vim -y 
 
+SHELL ["/bin/bash", "-c"] 
+
+RUN source /opt/tauv/packages/setup.bash && \
+    mkdir -p zed_ros_ws/src && \
+    cd zed_ros_ws/src && \ 
+    git clone --recursive https://github.com/stereolabs/zed-ros-wrapper.git && \
+    cd ../ && \ 
+    catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release -DBOOST_THREAD_INTERNAL_CLOCK_IS_MONO=True && \
+    catkin config --install --install-space /opt/tauv/packages && \
+    catkin build && \ 
+    source ./devel/setup.bash
+
+#TODO - This doesn't build, we need to manually set the CUDA Compatibility version for the Orin 
+# need to add '-O3 -gencode arch=compute_87,code=sm_87' to darknet_ros/CMakeLists.txt
+# see readme of darknet_ros repo for more details
+
+# RUN source /opt/tauv/packages/setup.bash && \
+#     mkdir -p darknet_ws/src && \
+#     cd darknet_ws/src && \
+#     git clone --recursive https://github.com/leggedrobotics/darknet_ros && \
+#     cd ../ && \ 
+#     rosinstall_generator cv_bridge --rosdistro noetic --tar > darknet.rosinstall && \ 
+#     vcs import --input darknet.rosinstall ./src && \ 
+#     sed -i 's/python37/python3/' src/vision_opencv/cv_bridge/CMakeLists.txt && \ 
+#     catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release -DBOOST_THREAD_INTERNAL_CLOCK_IS_MONO=True && \
+#     catkin config --install --install-space /opt/tauv/packages && \
+#     catkin build && \ 
+#     source /opt/tauv/packages/setup.bash
 
 #  setup entrypoint
 
