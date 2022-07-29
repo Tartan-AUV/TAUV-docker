@@ -12,7 +12,7 @@ up: build
 # Kills the docker container
 .PHONY: kill
 kill:
-	docker-compose kill && docker-compose rm
+	docker-compose kill && docker-compose rm 
 
 # Attaches a shell to the docker container
 .PHONY: attach
