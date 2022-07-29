@@ -39,8 +39,6 @@ RUN source /opt/tauv/packages/setup.bash && \
 
 RUN pip3 install simple_pid dataclasses osqp 
 
-#  setup entrypoint
-
 RUN apt-get install -y tmux vim
 COPY ./.tmux.conf /root/.tmux.conf
 COPY ./ros_entrypoint.sh /ros_entrypoint.sh
