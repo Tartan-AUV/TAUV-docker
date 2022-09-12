@@ -8,6 +8,9 @@ SHELL ["/bin/bash", "-c"]
 
 RUN source /opt/tauv/packages/setup.bash && \
     mkdir -p zed_ros_ws/src && \
+    cd zed_ros_ws/src && \ 
+    git clone --recursive https://github.com/stereolabs/zed-ros-wrapper.git && \
+    cd ../ && \ 
     catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release -DBOOST_THREAD_INTERNAL_CLOCK_IS_MONO=True && \
     catkin config --install --install-space /opt/tauv/packages && \
     catkin build && \ 
