@@ -1,6 +1,10 @@
 FROM ros:noetic
 
 RUN apt-get update && apt-get install -y \
+    ros-${ROS_DISTRO}-darknet-ros \
+    ros-${ROS_DISTRO}-zed-ros-wrapper && \
+    ros-${ROS_DISTRO}-cv-bridge && \
+    ros-${ROS_DISTRO}-vision-opencv && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
@@ -8,17 +12,17 @@ SHELL ["/bin/bash", "-c"]
 
 RUN source /opt/tauv/packages/setup.bash && \
     mkdir -p zed_ros_ws/src && \
-    cd zed_ros_ws/src && \ 
-    git clone --recursive https://github.com/stereolabs/zed-ros-wrapper.git && \
-    cd ../ && \ 
+    # cd zed_ros_ws/src && \ 
+    # git clone --recursive https://github.com/stereolabs/zed-ros-wrapper.git && \
+    # cd ../ && \ 
     catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release -DBOOST_THREAD_INTERNAL_CLOCK_IS_MONO=True && \
     catkin config --install --install-space /opt/tauv/packages && \
     catkin build && \ 
     source ./devel/setup.bash
 
-FROM stereolabs/zed:3.7-gl-devel-cuda11.4-ubuntu20.04
+# FROM stereolabs/zed:3.7-gl-devel-cuda11.4-ubuntu20.04
 
-FROM daisukekobayashi/darknet:gpu-cv-cc86
+# FROM daisukekobayashi/darknet:gpu-cv-cc86
 
 RUN pip3 install simple_pid dataclasses osqp 
 
