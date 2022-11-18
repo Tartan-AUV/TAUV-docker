@@ -77,25 +77,25 @@ RUN apt-get update && \
 ARG OPENCV_VERSION=4.6.0
 
 
-RUN cd /opt/ &&\
-    wget https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip &&\
-    unzip $OPENCV_VERSION.zip &&\
-    rm $OPENCV_VERSION.zip &&\
-    wget https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.zip &&\
-    unzip ${OPENCV_VERSION}.zip &&\
-    rm ${OPENCV_VERSION}.zip &&\
-    mkdir /opt/opencv-${OPENCV_VERSION}/build && cd /opt/opencv-${OPENCV_VERSION}/build &&\
-    cmake \
-    -DOPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib-${OPENCV_VERSION}/modules \
-    -DWITH_CUDA=ON \
-    -DCUDA_ARCH_BIN=7.5,8.0,8.6 \
-    -DCMAKE_BUILD_TYPE=RELEASE \
-    -DCMAKE_INSTALL_PREFIX=/usr/local \
-    .. &&\
-    make -j"$(nproc)" && \
-    make install && \
-    ldconfig && \
-    rm -rf /opt/opencv-${OPENCV_VERSION} && rm -rf /opt/opencv_contrib-${OPENCV_VERSION}
+# RUN cd /opt/ &&\
+#     wget https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip &&\
+#     unzip $OPENCV_VERSION.zip &&\
+#     rm $OPENCV_VERSION.zip &&\
+#     wget https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.zip &&\
+#     unzip ${OPENCV_VERSION}.zip &&\
+#     rm ${OPENCV_VERSION}.zip &&\
+#     mkdir /opt/opencv-${OPENCV_VERSION}/build && cd /opt/opencv-${OPENCV_VERSION}/build &&\
+#     cmake \
+#     -DOPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib-${OPENCV_VERSION}/modules \
+#     -DWITH_CUDA=ON \
+#     -DCUDA_ARCH_BIN=7.5,8.0,8.6 \
+#     -DCMAKE_BUILD_TYPE=RELEASE \
+#     -DCMAKE_INSTALL_PREFIX=/usr/local \
+#     .. &&\
+#     make -j"$(nproc)" && \
+#     make install && \
+#     ldconfig && \
+#     rm -rf /opt/opencv-${OPENCV_VERSION} && rm -rf /opt/opencv_contrib-${OPENCV_VERSION}
 
 
 RUN pip3 install --upgrade pip && \ 
