@@ -26,6 +26,10 @@ RUN apt update && \
     build-essential && \
     rosdep init && \
     rosdep update && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN apt udpate && \
+    apt install -y --no-install-recommends \
     python3-empy && \
     rm -rf /var/lib/apt/lists/*
 
