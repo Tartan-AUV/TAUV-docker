@@ -26,6 +26,7 @@ RUN apt update && \
     build-essential && \
     rosdep init && \
     rosdep update && \
+    python3-empy && \
     rm -rf /var/lib/apt/lists/*
 
 RUN mkdir ros_catkin_ws && \
