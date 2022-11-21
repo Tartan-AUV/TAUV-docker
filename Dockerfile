@@ -1,10 +1,3 @@
-
-
-# RUN rm /etc/apt/sources.list.d/* && \
-#     echo "deb https://repo.download.nvidia.com/jetson/common r35.1 main" > /etc/apt/sources.list.d/nvidia-l4t-apt-source.list && \
-#     echo "deb https://repo.download.nvidia.com/jetson/t234 r35.1 main" >> /etc/apt/sources.list.d/nvidia-l4t-apt-source.list
-# FROM stereolabs/zed:3.7-tools-devel-jetson-jp5.0.2
-
 FROM nvcr.io/nvidia/l4t-ml:r35.1.0-py3
 
 WORKDIR /workspace
@@ -35,45 +28,16 @@ RUN apt update && \
     rosdep update && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt update && \
-    apt install -y --no-install-recommends \
-    ros-noetic-desktop-full \
-    && rm -rf /var/lib/apt/lists/*
+RUN mkdir ros_catkin_ws && \
+    cd ros_catkin_ws && \
+    rosinstall_generator ros_base vision_msgs --rosdistro noetic --deps --tar > noetic-ros_base.rosinstall && \
+    mkdir src && \
+    vcs import --input noetic-ros_base.rosinstall ./src && \
+    apt-get update && \
+    rosdep install --from-paths ./src --ignore-packages-from-source --rosdistro noetic --skip-keys python3-pykdl -y && \
+    python3 ./src/catkin/bin/catkin_make_isolated --install --install-space /opt/ros/noetic -DCMAKE_BUILD_TYPE=Release && \
+    rm -rf /var/lib/apt/lists/*
 
-
-RUN python3 -m pip install cython
-
-# RUN apt-get update && \
-#     apt-get install -y \
-#     python3-pip \
-#     unzip \
-#     yasm \
-#     pkg-config \
-#     libswscale-dev \
-#     libtbb2 \
-#     libtbb-dev \
-#     libjpeg-dev \
-#     libpng-dev \
-#     libtiff-dev \
-#     libavformat-dev \
-#     libpq-dev \
-#     libxine2-dev \
-#     libglew-dev \
-#     libtiff5-dev \
-#     zlib1g-dev \
-#     libjpeg-dev \
-#     libavcodec-dev \
-#     libavformat-dev \
-#     libavutil-dev \
-#     libpostproc-dev \
-#     libswscale-dev \
-#     libeigen3-dev \
-#     libtbb-dev \
-#     libgtk2.0-dev \
-#     pkg-config \
-#     python3-dev \
-#     python3-numpy \
-#     && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m pip install -U pip && \
     python3 -m pip install --extra-index-url https://artifacts.luxonis.com/artifactory/luxonis-python-snapshot-local/ depthai
