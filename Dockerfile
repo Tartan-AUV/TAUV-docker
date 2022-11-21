@@ -28,10 +28,9 @@ RUN apt update && \
     rosdep update && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt udpate && \
-    apt install -y --no-install-recommends \
-    python3-empy && \
-    rm -rf /var/lib/apt/lists/*
+RUN python3 -m pip install -U \
+    pip \
+    empy
 
 RUN mkdir ros_catkin_ws && \
     cd ros_catkin_ws && \
