@@ -28,16 +28,19 @@ RUN apt update && \
     rosdep update && \
     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir ros_catkin_ws && \
-    cd ros_catkin_ws && \
-    rosinstall_generator ros_base vision_msgs --rosdistro noetic --deps --tar > noetic-ros_base.rosinstall && \
-    mkdir src && \
-    vcs import --input noetic-ros_base.rosinstall ./src && \
-    apt-get update && \
-    rosdep install --from-paths ./src --ignore-packages-from-source --rosdistro noetic --skip-keys python3-pykdl -y && \
-    python3 ./src/catkin/bin/catkin_make_isolated --install --install-space /opt/ros/noetic -DCMAKE_BUILD_TYPE=Release && \
-    rm -rf /var/lib/apt/lists/*
-
+# RUN mkdir ros_catkin_ws && \
+#     cd ros_catkin_ws && \
+#     rosinstall_generator ros_base vision_msgs --rosdistro noetic --deps --tar > noetic-ros_base.rosinstall && \
+#     mkdir src && \
+#     vcs import --input noetic-ros_base.rosinstall ./src && \
+#     apt-get update && \
+#     rosdep install --from-paths ./src --ignore-packages-from-source --rosdistro noetic --skip-keys python3-pykdl -y && \
+#     python3 ./src/catkin/bin/catkin_make_isolated --install --install-space /opt/ros/noetic -DCMAKE_BUILD_TYPE=Release && \
+#     rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ros-noetic-desktop-full \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m pip install -U pip && \
     python3 -m pip install --extra-index-url https://artifacts.luxonis.com/artifactory/luxonis-python-snapshot-local/ depthai
