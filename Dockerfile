@@ -39,7 +39,7 @@ RUN apt update && \
 #     rm -rf /var/lib/apt/lists/*
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    ros-noetic-desktop \
+    ros-noetic-ros-base \
     && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m pip install -U pip && \
