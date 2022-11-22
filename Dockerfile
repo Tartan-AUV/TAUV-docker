@@ -46,7 +46,7 @@ RUN python3 -m pip install -U pip && \
     python3 -m pip install --extra-index-url https://artifacts.luxonis.com/artifactory/luxonis-python-snapshot-local/ depthai
 
 RUN mkdir -p darknet_ws/src && \
-    darknet_ws/src && \
+    cd darknet_ws/src && \
     git clone --recursive git@github.com:leggedrobotics/darknet_ros.git && \
     cd ../ && \
     catkin_make -DCMAKE_BUILD_TYPE=Release
