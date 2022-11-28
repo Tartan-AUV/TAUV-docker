@@ -13,7 +13,7 @@ RUN source /opt/tauv/packages/setup.bash && \
     catkin build darknet_ros -DCMAKE_BUILD_TYPE=Release && \
     source /opt/tauv/packages/setup.bash
 
-COPY ./packages/ros_entrypoint.sh /ros_entrypoint.sh
+COPY ./ros_entrypoint.sh /ros_entrypoint.sh
 RUN echo 'source /opt/ros/noetic/setup.bash' >> /root/.bashrc
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]
