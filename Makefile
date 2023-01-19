@@ -4,6 +4,11 @@
 build:
 	docker-compose build
 
+
+.PHONY build-packages
+build-packages:
+	docker-compose build --build-arg CACHEBUST=$(date +%s)
+
 # Builds and starts the docker container in the background
 .PHONY: up
 up: build
