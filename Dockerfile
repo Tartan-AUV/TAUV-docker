@@ -14,6 +14,7 @@ RUN mkdir -p darknet_ws/src && \
 RUN git clone --recurse-submodules git@github.com:Tartan-AUV/TAUV-ROS-Packages.git
 
 ARG CACHEBUST=1
+RUN echo "$CACHEBUST"
 WORKDIR /workspace/TAUV-ROS-Packages
 RUN sudo make deps
 
