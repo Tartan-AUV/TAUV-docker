@@ -1,11 +1,9 @@
-
 # builds the docker container
 .PHONY: build
 build:
 	docker-compose build
 
-
-.PHONY build-packages
+.PHONY: build-packages
 build-packages:
 	docker-compose build --build-arg CACHEBUST=$(date +%s)
 
