@@ -15,9 +15,30 @@ RUN git clone --recurse-submodules https://github.com/Tartan-AUV/TAUV-ROS-Packag
     sudo chmod 755 -R TAUV-ROS-Packages/
 
 ARG CACHEBUST=1
-RUN echo "$CACHEBUST" && \
-    cd /workspace/TAUV-ROS-Packages && \
-    sudo make deps
+RUN echo "$CACHEBUST"
 
-CMD ["bash"]
+RUN sudo apt update && apt install -y \
+    python3-pip \
+    python3-yaml \
+    python3-numpy \
+    python3-smbus \
+    ros-noetic-gazebo-ros-control \
+    ros-noetic-fkie-multimaster \
+    ros-noetic-imu-transformer \
+    ros-noetic-jsk-recognition-msgs \
+    ros-noetic-vision-msgs \
+    ros-noetic-phidgets-ik \
+    ros-noetic-imu-filter-madgwick \
+    libi2c-dev \
+    ros-noetic-image-transport \
+    ros-noetic-robot-localization \
+    ros-noetic-xacro && \
+    apt-get clean
+
+# && \
+#    cd /workspace/TAUV-ROS-Packages && \
+#    sudo make deps
+
+ENTRYPOINT ["/ros_entrypoint.sh"]
+CMD ["tail", "-f", "/dev/null"]
 WORKDIR /
