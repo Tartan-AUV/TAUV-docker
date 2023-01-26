@@ -2,16 +2,15 @@ version: "3.9"
 services:
   tauvservice:
     build: .
-    image: tauvcontainer:stable
+    image: tauvcontainer:raspberry-pi
     volumes:
       - /dev:/dev
       - /tm.X11-unix/:/tmp/.X11-unix
       - /dev/video0:/dev/video0
       - /tmp/.docker.xauth:/tmp/.docker.xauth
-      - /home/tartanauv/nvme/shared:/shared
-      - /home/tartanauv/data:/data 
     environment:
       XAUTHORITY: /tmp/.docker.xauth
     network_mode: "host"
-    privileged: true  
+    privileged: true
+    restart: always
 
