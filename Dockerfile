@@ -5,23 +5,10 @@ WORKDIR /workspace
 RUN python3 -m pip install -U pip && \
     python3 -m pip install --extra-index-url https://artifacts.luxonis.com/artifactory/luxonis-python-snapshot-local/ depthai
 
-# RUN mkdir -p darknet_ws/src && \
-#     cd darknet_ws/src && \
-#     git clone --recursive https://github.com/leggedrobotics/darknet_ros && \
-#     cd ../ && \ 
-#     catkin build darknet_ros -DCMAKE_BUILD_TYPE=Release
-
-RUN git clone --recurse-submodules https://github.com/Tartan-AUV/TAUV-ROS-Packages.git && \
-    sudo chmod 755 -R TAUV-ROS-Packages/
-
 ARG CACHEBUST=1
 RUN echo "$CACHEBUST"
 
 RUN sudo apt update && apt install -y \
-    python3-pip \
-    python3-yaml \
-    python3-numpy \
-    python3-smbus \
     ros-noetic-gazebo-ros-control \
     ros-noetic-fkie-multimaster \
     ros-noetic-imu-transformer \
@@ -32,12 +19,23 @@ RUN sudo apt update && apt install -y \
     libi2c-dev \
     ros-noetic-image-transport \
     ros-noetic-robot-localization \
+    ros-noetic-catkin \
     ros-noetic-xacro && \
+    libboost-all-dev && \
     apt-get clean
 
-# && \
-#    cd /workspace/TAUV-ROS-Packages && \
-#    sudo make deps
+RUN python3 -m pip install numpy scipy pyserial bitstring smbus2 grpcio-tools yaml osqp
+
+RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros-latest.list' && \
+    wget http://packages.ros.org/ros.key -O - | sudo apt-key add - && \
+    sudo apt-get update && \
+    sudo apt-get install -y python3-catkin-tools
+
+RUN mkdir -p darknet_ws/src && 
+    cd darknet_ws/src && \
+    git clone --recursive https://github.com/leggedrobotics/darknet_ros && \
+    cd ../ && \ 
+    catkin build darknet_ros -DCMAKE_BUILD_TYPE=Release
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["tail", "-f", "/dev/null"]
