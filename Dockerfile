@@ -31,7 +31,7 @@ RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/
     sudo apt-get update && \
     sudo apt-get install -y python3-catkin-tools
 
-RUN mkdir -p darknet_ws/src && 
+RUN mkdir -p darknet_ws/src && \
     cd darknet_ws/src && \
     git clone --recursive https://github.com/leggedrobotics/darknet_ros && \
     cd ../ && \ 
