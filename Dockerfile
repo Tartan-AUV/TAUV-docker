@@ -85,7 +85,7 @@ RUN sudo apt-get install -y \
 
 RUN echo 'source /opt/ros/noetic/setup.bash' >> /root/.bashrc
 RUN echo 'source /opt/tauv/packages/setup.bash' >> /root/.bashrc
-RUN echo 'source /shared/catkin_ws/devel/setup.bash' >> /root/.bashrc
+RUN echo 'source /shared/tauv_ws/devel/setup.bash' >> /root/.bashrc
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["tail", "-f", "/dev/null"]
