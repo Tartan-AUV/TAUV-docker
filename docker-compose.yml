@@ -13,3 +13,4 @@ services:
       XAUTHORITY: /tmp/.docker.xauth
     network_mode: "host"
     privileged: true
+    runtime: nvidia
