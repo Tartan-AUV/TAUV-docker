@@ -62,10 +62,10 @@ RUN sudo apt-get update -y
 
 RUN sudo apt-get install -y tmux vim
 
-RUN echo "deb https://repo.download.nvidia.com/jetson/ffmpeg main main" |  sudo tee -a /etc/apt/sources.list && \
-    echo "deb-src https://repo.download.nvidia.com/jetson/ffmpeg main main" |  sudo tee -a /etc/apt/sources.list && \
-    sudo apt-get update -y && \
-    sudo apt-get install -y -o DPkg::options::="--force-overwrite" ffmpeg
+# RUN echo "deb https://repo.download.nvidia.com/jetson/ffmpeg main main" |  sudo tee -a /etc/apt/sources.list && \
+    # echo "deb-src https://repo.download.nvidia.com/jetson/ffmpeg main main" |  sudo tee -a /etc/apt/sources.list && \
+    # sudo apt-get update -y && \
+    # sudo apt-get install -y -o DPkg::options::="--force-overwrite" ffmpeg
 
 RUN sudo apt-mark hold libopencv libopencv-core4.2 libopencv-dev && \ 
      sudo apt-get install -y \
