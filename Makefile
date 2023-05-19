@@ -1,4 +1,3 @@
-
 # builds the docker container
 .PHONY: build
 build:
