@@ -124,7 +124,7 @@ RUN sudo apt-get install -y \
     sudo apt-mark unhold libopencv libopencv-core4.2 libopencv-dev
 
 RUN sudo apt-get install -y libjpeg-dev zlib1g-dev libpython3-dev libopenblas-dev libavcodec-dev libavformat-dev libswscale-dev && \
-  git clone --branch 0.15.1 https://github.com/pytorch/vision torchvision && \
+  git clone --branch release/0.15 https://github.com/pytorch/vision torchvision && \
   cd torchvision && \
   export BUILD_VERSION=0.15.0 && \
   python3 setup.py install --user
