@@ -19,11 +19,54 @@ RUN sudo apt update && apt install -y \
     ros-noetic-robot-localization \
     ros-noetic-catkin \
     ros-noetic-xacro && \
+    cmake && \
     apt-get clean
+
+RUN sudo apt update && apt install -y \
+	autoconf \
+	bc \
+	build-essential \
+	g++-8 \
+	gcc-8 \
+	clang-8 \
+	lld-8 \
+	gettext-base \
+	gfortran-8 \
+	iputils-ping \
+	libbz2-dev \
+	libc++-dev \
+	libcgal-dev \
+	libffi-dev \
+	libfreetype6-dev \
+	libhdf5-dev \
+	libjpeg-dev \
+	liblzma-dev \
+	libncurses5-dev \
+	libncursesw5-dev \
+	libpng-dev \
+	libreadline-dev \
+	libssl-dev \
+	libsqlite3-dev \
+	libxml2-dev \
+	libxslt-dev \
+	locales \
+	moreutils \
+	openssl \
+	python-openssl \
+	rsync \
+	scons \
+	python3-pip \
+	libopenblas-dev \
+	&& apt-get clean
+
 
 RUN sudo apt-get clean && apt-get autoremove
 
-RUN python3 -m pip install numpy scipy pyserial bitstring smbus2 grpcio-tools osqp
+RUN python3 -m pip install numpy scipy pyserial bitstring smbus2 grpcio-tools Pillow matplotlib spatialmath-python
+
+ENV TORCH_INSTALL=https://developer.download.nvidia.cn/compute/redist/jp/v511/pytorch/torch-2.0.0+nv23.05-cp38-cp38-linux_aarch64.whl
+
+RUN python3 -m pip install --upgrade pip; python3 -m pip install aiohttp numpy=='1.19.4' scipy=='1.5.3' export "LD_LIBRARY_PATH=/usr/lib/llvm-8/lib:$LD_LIBRARY_PATH"; python3 -m pip install --upgrade protobuf; python3 -m pip install --no-cache $TORCH_INSTALL
 
 RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros-latest.list' && \
     wget http://packages.ros.org/ros.key -O - | sudo apt-key add - && \
