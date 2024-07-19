@@ -127,7 +127,7 @@ RUN sudo apt-get install libjpeg-dev zlib1g-dev libpython3-dev libopenblas-dev l
   git clone --branch <version> https://github.com/pytorch/vision torchvision && \
   cd torchvision && \
   export BUILD_VERSION=0.x.0 && \
-  python3 setup.py install --user && \
+  python3 setup.py install --user
 
 RUN echo 'source /opt/ros/noetic/setup.bash' >> /root/.bashrc
 RUN echo 'source /opt/tauv/packages/setup.bash' >> /root/.bashrc
