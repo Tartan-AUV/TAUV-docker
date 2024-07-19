@@ -123,10 +123,10 @@ RUN sudo apt-get install -y \
     libgstreamer-plugins-good1.0-dev && \
     sudo apt-mark unhold libopencv libopencv-core4.2 libopencv-dev
 
-RUN sudo apt-get install libjpeg-dev zlib1g-dev libpython3-dev libopenblas-dev libavcodec-dev libavformat-dev libswscale-dev && \
-  git clone --branch <version> https://github.com/pytorch/vision torchvision && \
+RUN sudo apt-get install -y libjpeg-dev zlib1g-dev libpython3-dev libopenblas-dev libavcodec-dev libavformat-dev libswscale-dev && \
+  git clone --branch 0.15.1 https://github.com/pytorch/vision torchvision && \
   cd torchvision && \
-  export BUILD_VERSION=0.x.0 && \
+  export BUILD_VERSION=0.15.0 && \
   python3 setup.py install --user
 
 RUN echo 'source /opt/ros/noetic/setup.bash' >> /root/.bashrc
