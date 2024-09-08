@@ -73,6 +73,7 @@ RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/
     sudo apt-get update && \
     sudo apt-get install -y python3-catkin-tools
 
+# TODO: Remove all darknet stuff
 RUN mkdir -p darknet_ws/src && \
     cd darknet_ws/src && \
     git clone --recursive https://github.com/Tartan-AUV/darknet_ros_orin.git darknet_ros
