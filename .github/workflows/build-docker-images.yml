@@ -12,4 +12,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker-compose up --build -d tauv-x86-nvidia-workstation
+      run: docker compose up --build -d tauv-x86-nvidia-workstation
