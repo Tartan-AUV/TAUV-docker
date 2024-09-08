@@ -7,9 +7,9 @@ on:
     branches: [ "develop" ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-workstation-x86-nvidia:
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker-compose up --build tauv-workstation
+      run: docker-compose up --build -d tauv-x86-nvidia-workstation
