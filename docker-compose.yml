@@ -45,13 +45,13 @@ services:
     environment:
       DISPLAY: "${DISPLAY}"
       QT_X11_NO_MITSHM: "1"
-      XAUTHORITY: "/tmp/.X11-unix"
     volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw  # X11 socket for GUI forwarding
       - /dev/dri:/dev/dri  # Mount the DRI device for GPU access TODO: Do we need this
       - ${SHARED_DIR}:/shared  # Bind the SHARED_DIR to /shared in the container
     tty: true  # Allocate a pseudo-TTY
     stdin_open: true  # Keep stdin open TODO: DO WE NEED THIS
+    ports:
+      - "5901:5901"
     depends_on:
       - x86-nvidia-common
     deploy:
