@@ -51,7 +51,7 @@ services:
     tty: true  # Allocate a pseudo-TTY
     stdin_open: true  # Keep stdin open TODO: DO WE NEED THIS
     ports:
-      - "5901:5901"
+      - "4008:4000"
     depends_on:
       - x86-nvidia-common
     deploy:
