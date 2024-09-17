@@ -1,7 +1,4 @@
 ARG BASE_IMAGE
-ARG USER_NAME
-ARG USER_PASSWORD
-
 FROM ${BASE_IMAGE}
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -13,14 +10,16 @@ RUN wget https://downloads.sourceforge.net/project/virtualgl/3.1/virtualgl_3.1_a
 RUN dpkg -i virtualgl_3.1_amd64.deb
 RUN /opt/VirtualGL/bin/vglserver_config +glx +s +f +t
 
-RUN apt-get update && apt-get install -y openssh-server
+RUN apt-get update && apt-get install -y openssh-server passwd
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 RUN mkdir /var/run/sshd
 EXPOSE 22
 
-RUN adduser ${USER_NAME}
-RUN echo "${USER_NAME}:${USER_PASSWORD}" | chpasswd
-RUN usermod -aG sudo ${USER_NAME}
+ARG SSH_USER_NAME
+ARG SSH_USER_PASSWORD
+RUN useradd -ms /bin/bash "${SSH_USER_NAME}"
+RUN echo "${SSH_USER_NAME}:${SSH_USER_PASSWORD}" | chpasswd
+RUN usermod -aG sudo ${SSH_USER_NAME}
 
 CMD ["/usr/sbin/sshd", "-D"]
 
