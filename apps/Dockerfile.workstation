@@ -5,4 +5,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-noetic-desktop-full=1.5.0-1* \
     && rm -rf /var/lib/apt/lists/*
 
-ENV USER=root
+RUN apt-get update && apt-get install -y wget libegl1-mesa libxtst6 mesa-utils
+RUN wget https://downloads.sourceforge.net/project/virtualgl/3.1/virtualgl_3.1_amd64.deb
+RUN dpkg -i virtualgl_3.1_amd64.deb
+RUN /opt/VirtualGL/bin/vglserver_config +glx +s +f +t
+
+RUN apt-get update && apt-get install -y openssh-server
+RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+RUN mkdir /var/run/sshd
+
+EXPOSE 22
+CMD ["/usr/sbin/sshd", "-D"]
+

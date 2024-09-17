@@ -50,8 +50,9 @@ services:
       - ${SHARED_DIR}:/shared  # Bind the SHARED_DIR to /shared in the container
     tty: true  # Allocate a pseudo-TTY
     stdin_open: true  # Keep stdin open TODO: DO WE NEED THIS
+    privileged: true
     ports:
-      - "4008:4000"
+      - 10122:22
     depends_on:
       - x86-nvidia-common
     deploy:
