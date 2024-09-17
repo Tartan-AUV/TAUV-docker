@@ -18,7 +18,7 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/
 RUN mkdir /var/run/sshd
 EXPOSE 22
 
-RUN useradd -m -s /bin/bash ${USER_NAME}
+RUN adduser ${USER_NAME}
 RUN echo "${USER_NAME}:${USER_PASSWORD}" | chpasswd
 RUN usermod -aG sudo ${USER_NAME}
 
