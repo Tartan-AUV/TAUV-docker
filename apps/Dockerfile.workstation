@@ -21,5 +21,8 @@ RUN useradd -ms /bin/bash "${SSH_USER_NAME}"
 RUN echo "${SSH_USER_NAME}:${SSH_USER_PASSWORD}" | chpasswd
 RUN usermod -aG sudo ${SSH_USER_NAME}
 
-CMD ["/usr/sbin/sshd", "-D"]
+ENV _USER=${SSH_USER_NAME}
+COPY apps/workstation-entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 

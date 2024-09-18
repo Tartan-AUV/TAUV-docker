@@ -1,5 +1,16 @@
 #!/bin/bash
 
-rocker --nvidia --x11 --privileged --home --port 22$(id -u | rev | cut -c1-3 | rev):22 tauv/x86-nvidia-workstation > /dev/null 2>&1 &
+if [[ -z "${DOCKER_SHARED_DIR}" ]]; then
+    mkdir -p $HOME/shared
+    SHARED_DIR=$HOME/shared
+else
+    SHARED_DIR=$DOCKER_SHARED_DIR
+fi
 
-echo "Docker container started, ssh port 22$(id -u | rev | cut -c1-3 | rev)."
+echo "Using shared folder: $SHARED_DIR"
+
+echo "Starting container, SSH port 22$(id -u | rev | cut -c1-3 | rev)."
+
+rocker --nvidia --x11 --privileged --port 22$(id -u | rev | cut -c1-3 | rev):22 --volume $SHARED_DIR:$SHARED_DIR -- tauv/x86-nvidia-workstation
+
+
