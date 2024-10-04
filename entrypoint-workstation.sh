@@ -16,4 +16,5 @@ websockify -D --web=/usr/share/novnc/ "$NOVNC_PORT" localhost:$((5900 + DISPLAY_
 echo "NoVNC server started on port $NOVNC_PORT"
 
 source /root/.bashrc
+export DISPLAY=$DISPLAY
 exec "$@"
