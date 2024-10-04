@@ -9,8 +9,8 @@ fi
 
 echo "Using shared folder: $SHARED_DIR"
 
-echo "Starting container, SSH port 22$(id -u | rev | cut -c1-3 | rev)."
+echo "Starting container, VNC address: http://tauv-dev.lan.local.cmu.edu:60$(id -u | rev | cut -c1-3 | rev)."
 
-rocker --nvidia --x11 --privileged --port 22$(id -u | rev | cut -c1-3 | rev):22 --volume $SHARED_DIR:$SHARED_DIR -- tauv/x86-nvidia-workstation
+rocker --nvidia --privileged --port 60$(id -u | rev | cut -c1-3 | rev):8080 --volume $SHARED_DIR:/shared --volume /dev/shm:/dev/shm -- tauv/x86-nvidia-workstation
 
 

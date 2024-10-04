@@ -2,47 +2,12 @@ ARG BASE_IMAGE
 
 FROM ${BASE_IMAGE}
 
-# ROS
+# ROS desktop packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-noetic-desktop-full=1.5.0-1* \
     && rm -rf /var/lib/apt/lists/*
 
-# VirtualGl
-RUN apt-get update && apt-get install -y wget libegl1-mesa libxtst6 mesa-utils
-RUN wget https://downloads.sourceforge.net/project/virtualgl/3.1/virtualgl_3.1_amd64.deb
-RUN dpkg -i virtualgl_3.1_amd64.deb
-RUN /opt/VirtualGL/bin/vglserver_config +glx +s +f +t
-
-# SSH
-RUN apt-get update && apt-get install -y openssh-server passwd
-RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
-RUN mkdir /var/run/sshd
-EXPOSE 22
-
-# Graphical shell and VNC
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    xfce4 xfce4-goodies \
-    tightvncserver \
-    dbus-x11 x11-xserver-utils \
-    sudo && \
-    rm -rf /var/lib/apt/lists/*
-
-# User
-ARG USER_NAME
-ARG USER_PASSWORD
-RUN useradd -ms /bin/bash "${USER_NAME}"
-RUN echo "${USER_NAME}:${USER_PASSWORD}" | chpasswd
-RUN usermod -aG sudo ${USER_NAME}
-ENV HOME /home/${USER_NAME}
-USER ${USER_NAME}
-WORKDIR $HOME
-
-RUN mkdir -p $HOME/.vnc && \
-    echo "${USER_PASSWORD}" | vncpasswd -f > $HOME/.vnc/passwd && \
-    chmod 600 $HOME/.vnc/passwd
-
-RUN echo -e "#!/bin/bash\nstartxfce4 &" > $HOME/.vnc/xstartup && \
-    chmod +x $HOME/.vnc/xstartup
-
-CMD ["vncserver", "-geometry", "1280x800", "-localhost", "no", ":1"]
+# ENTYPOINT
+COPY entrypoint-workstation.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/bin/bash"]
