@@ -1,28 +1,23 @@
 ARG BASE_IMAGE
+
 FROM ${BASE_IMAGE}
 
+# ROS desktop packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-noetic-desktop-full=1.5.0-1* \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y wget libegl1-mesa libxtst6 mesa-utils
-RUN wget https://downloads.sourceforge.net/project/virtualgl/3.1/virtualgl_3.1_amd64.deb
-RUN dpkg -i virtualgl_3.1_amd64.deb
-RUN /opt/VirtualGL/bin/vglserver_config +glx +s +f +t
+# Misc 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    tmux neovim
 
-RUN apt-get update && apt-get install -y openssh-server passwd
-RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
-RUN mkdir /var/run/sshd
-EXPOSE 22
+RUN echo 'alias vim="nvim"' >> /root/.bashrc
+RUN echo 'chsh -s /bin/bash' >> /root/.bashrc
+RUN echo 'source /opt/ros/noetic/setup.bash' >> /root/.bashrc
+RUN echo 'source /shared/tauv_ws/devel/setup.bash' >> /root/.bashrc
 
-ARG SSH_USER_NAME
-ARG SSH_USER_PASSWORD
-RUN useradd -ms /bin/bash "${SSH_USER_NAME}"
-RUN echo "${SSH_USER_NAME}:${SSH_USER_PASSWORD}" | chpasswd
-RUN usermod -aG sudo ${SSH_USER_NAME}
 
-ENV _USER=${SSH_USER_NAME}
-COPY apps/workstation-entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
+# ENTYPOINT
+COPY entrypoint-workstation.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/bin/bash"]
