@@ -15,5 +15,5 @@ vncserver "$DISPLAY" -depth 24 -geometry "$VNC_RESOLUTION"
 websockify -D --web=/usr/share/novnc/ "$NOVNC_PORT" localhost:$((5900 + DISPLAY_NUMBER))
 echo "NoVNC server started on port $NOVNC_PORT"
 
-source /opt/ros/noetic/setup.bash
+source /root/.bashrc
 exec "$@"
